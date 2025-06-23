@@ -1,5 +1,3 @@
-
-
 $(document).ready(function () {
 
     
@@ -18,22 +16,17 @@ $(document).ready(function () {
             async: true,
             success: function (data) {
                 data = JSON.parse(data);
-                if (data.number!=undefined){
-                    $("#number_info").text("Number: " + data.number)
-                }else{
-                    $("#number_info").text("No number")
-                }
+                updateValues(data.predictions);
             },
         });
         
     });
 
     $("#clear_canvas").click(function(){
-        var $canvas = $("canvas");
-        var context = $canvas[0].getContext("2d");
-        var canvas = document.getElementById('canvas_draw');
+        var canvas = $("#canvas_draw")[0];
+        var context = canvas.getContext("2d");
         context.clearRect(0, 0, canvas.width, canvas.height);
-        $("#number_info").text("");
+        updateValues([0, 0, 0, 0, 0, 0, 0, 0, 0, 0]); 
     });
 
 });
@@ -45,7 +38,7 @@ var $canvas = $("canvas");
 var context = $canvas[0].getContext("2d");
 context.strokeStyle = color;
 context.lineJoin = "round";
-context.lineWidth = 27;
+context.lineWidth = 50;
 context.globalAlpha = 1;
 
 var lastEvent;

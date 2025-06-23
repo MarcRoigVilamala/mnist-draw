@@ -1,15 +1,17 @@
 {% extends "base.html" %} {% block content %}
 
-    <div class="row">
+    <div>
 
-        <div class="col-sm-4">
-            <canvas width="280" height="280" style="border: 1px solid black" id="canvas_draw"></canvas>
+        <div class="interactive_part">
+            <canvas width="700" height="700" style="border: 1px solid black" id="canvas_draw"></canvas>
         </div>
 
-        <div class="col-sm-8">
+        <div class="graph_part">
             <button class="btn" id="clear_canvas">Clear</button>
             <button class="btn" id="make_predict">Predict</button>
             <span id="number_info"></span>
+
+            <div id="chartContainer"></div>
         </div>
 
     </div>

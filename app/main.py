@@ -79,32 +79,33 @@ def predict():
         arr = np.array(im)[:, :, 3]
 
         arr_small = cv2.resize(arr, (28, 28)).reshape(28, 28, 1)
-        arr_small = torch.from_numpy(arr_small.transpose(2, 0, 1)).type('torch.FloatTensor')
-        arr_small = arr_small.unsqueeze(0)
+        torch_arr = torch.from_numpy(arr_small.transpose(2, 0, 1)).type('torch.FloatTensor')
+        torch_arr = torch_arr.unsqueeze(0)
 
         # Make the prediction of the current face
         with torch.no_grad():
-            prediction = MODEL(Variable(arr_small).cpu())
+            prediction = MODEL(Variable(torch_arr).cpu())
         preds_classes = torch.argmax(prediction, dim=1)
         confianza = SOFTMAX(prediction)
 
-        # Saves the prediction in a file to latex inspect
-        filename = uuid.uuid4().hex
-        cv2.imwrite(os.path.join(USER_DATA_DIR, f'{filename}.png'), arr)
-        info = {str(clase):prob for clase, prob in enumerate(confianza.view(-1).cpu().numpy())}
-        info["file"] = filename
-        info["label"] = -1
-        info["execution"] = str(time.time() - start_time)
+        # # Saves the prediction in a file to latex inspect
+        # filename = uuid.uuid4().hex
+        # cv2.imwrite(os.path.join(USER_DATA_DIR, f'{filename}.png'), arr)
+        # cv2.imwrite(os.path.join(USER_DATA_DIR, f'{filename}_small.png'), arr_small)
+        # info = {str(clase):prob for clase, prob in enumerate(confianza.view(-1).cpu().numpy())}
+        # info["file"] = filename
+        # info["label"] = -1
+        # info["execution"] = str(time.time() - start_time)
 
-        if os.path.isfile(DF_PATH):
-            df = pd.read_csv(DF_PATH)
-            df = df.append(info, ignore_index=True)
-        else:
-            df = pd.DataFrame(info, index=[0])
-        df.to_csv(DF_PATH, index=False)
+        # if os.path.isfile(DF_PATH):
+        #     df = pd.read_csv(DF_PATH)
+        #     df = df.append(info, ignore_index=True)
+        # else:
+        #     df = pd.DataFrame(info, index=[0])
+        # df.to_csv(DF_PATH, index=False)
 
-        # Return to the browser what we find as a json object
-        return json.dumps({"number": preds_classes.item()})
+        # # Return to the browser what we find as a json object
+        return json.dumps({"number": preds_classes.item(), "predictions": confianza[0].tolist()})
     return json.dumps({'status': 'error', 'message': 'Bad request'})
 
 @main.route('/ping', methods=['GET', 'POST'])
