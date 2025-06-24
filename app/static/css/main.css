@@ -8,7 +8,7 @@ div {
 }
 
 div.main_page {
-    width: 100%,
+    width: 100%;
     overflow: auto;
 }
 
@@ -87,10 +87,6 @@ html {
     -ms-text-size-adjust: 100%;
     -ms-overflow-style: scrollbar;
     -webkit-tap-highlight-color: transparent
-}
-
-@-ms-viewport {
-    width: device-width
 }
 
 article,aside,dialog,figcaption,figure,footer,header,hgroup,main,nav,section {
