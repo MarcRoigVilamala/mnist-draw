@@ -36,10 +36,8 @@ from .static.models import models_interface
 
 main = Blueprint('main', __name__)
 
-CAT2CLASS = {0: "Male", 1: "Female"}
 USER_DATA_DIR = "app/static/user_data"
 os.makedirs(USER_DATA_DIR, exist_ok=True)
-DF_PATH = os.path.join(USER_DATA_DIR, "info.csv")
 
 """ -- MODEL LOAD -- """
 
@@ -61,9 +59,6 @@ SOFTMAX = nn.Softmax()
 
 @main.route('/', methods=['GET'])
 def index():
-    # Main page
-    with open(os.path.join(USER_DATA_DIR, "access.txt"), "a") as myfile:
-        myfile.write(f"{datetime.now(tz=pytz.timezone('Europe/Madrid')).strftime('%Y-%m-%d %H:%M:%S')}\n")
     return render_template('index.html')
 
 
