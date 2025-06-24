@@ -21,10 +21,10 @@
             <h1>MNIST Demo</h1>
 
             <a href="{{ url_for('main.index') }}">
-                <div class="page_link {% if current_page == 'index' %}active{% endif %}">Home</div>
+                <div class="page_link {% if current_page == 'index' %}active{% endif %}">Training</div>
             </a>
             <a href="{{ url_for('main.draw') }}">
-                <div class="page_link {% if current_page == 'draw' %}active{% endif %}">Draw</div>
+                <div class="page_link {% if current_page == 'draw' %}active{% endif %}">Inference</div>
             </a>
        </div>
         <div class="main_content">{% block content %}{% endblock %}</div>
