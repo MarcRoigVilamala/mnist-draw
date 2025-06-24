@@ -9,11 +9,18 @@
         <div class="graph_part">
             <button class="btn" id="clear_canvas">Clear</button>
             <button class="btn" id="make_predict">Predict</button>
-            <span id="number_info"></span>
 
             <div id="chartContainer"></div>
         </div>
 
     </div>
+
+    <script src="{{ url_for('static', filename='js/model.js') }}" type="text/javascript"></script>
+    <script>
+        window.onload = function () {
+            updateValues([0, 0, 0, 0, 0, 0, 0, 0, 0, 0]);
+        }
+    </script>
+
 
 {% endblock %}

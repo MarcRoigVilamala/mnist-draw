@@ -23,6 +23,3 @@ function updateValues(values) {
     $("#chartContainer").CanvasJSChart(options);
 }
 
-window.onload = function () {
-    updateValues([0, 0, 0, 0, 0, 0, 0, 0, 0, 0]);
-}

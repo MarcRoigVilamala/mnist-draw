@@ -57,9 +57,14 @@ MODEL.eval()
 SOFTMAX = nn.Softmax()
 
 
+@main.route('/', methods=['GET'])
+def index():
+    return render_template('index.html', current_page="index")
+
+
 @main.route('/draw', methods=['GET'])
 def draw():
-    return render_template('draw.html')
+    return render_template('draw.html', current_page="draw")
 
 
 @main.route('/predict', methods=['GET', 'POST'])

@@ -1,0 +1,182 @@
+{% extends "base.html" %} {% block content %}
+
+    <div>
+
+        <div class="interactive_part">
+            <div class="image_to_classify">
+                <img id="img_for_class" src="{{ url_for('static', filename='imgs/mnist_images/3.png') }}">
+            </div>
+            <div class="sliders">
+                <h3>Neural Network Parameters</h3>
+                <div id="slider_container"></div>
+                <p>
+                    <input type="range" min="0" max="1" value="0.5" step="0.01" class="slider" id="slider1">
+                    <output id="slider1_direction"></output>
+                </p>
+                <p>
+                    <input type="range" min="0" max="1" value="0.5" step="0.01" class="slider" id="slider2">
+                    <output id="slider2_direction"></output>
+                </p>
+                <p>
+                    <input type="range" min="0" max="1" value="0.5" step="0.01" class="slider" id="slider3">
+                    <output id="slider3_direction"></output>
+                </p>
+                <p>
+                    <input type="range" min="0" max="1" value="0.5" step="0.01" class="slider" id="slider4">
+                    <output id="slider4_direction"></output>
+                </p>
+                <p>
+                    <input type="range" min="0" max="1" value="0.5" step="0.01" class="slider" id="slider5">
+                    <output id="slider5_direction"></output>
+                </p>
+            </div>
+
+            <div class="messages">
+                <p id="epoch_message">Epoch: 0</p>
+                <p id="highscore_message"></p>
+                <p id="congrat_message"></p>
+                <button id="reset_button" onclick="reset()" style="display: none">Play Again!</button>
+            </div>
+
+
+        </div>
+
+        <div class="graph_part">
+            <button class="btn" id="make_predict" onclick="test();">Predict</button>
+
+            <div id="chartContainer"></div>
+        </div>
+
+    </div>
+
+    <script>
+        const START_TOLERANCE = 0.1;  // Sliders shouldn't start within this value of their correct position
+        const CHECK_TOLERANCE = 0.05;  // Sliders should be within this tolerance to be "correct"
+
+        const SLIDERS = [
+            "#slider1",
+            "#slider2",
+            "#slider3",
+            "#slider4",
+            "#slider5",
+        ];
+        const SLIDER_DIRECTIONS = [
+            "#slider1_direction",
+            "#slider2_direction",
+            "#slider3_direction",
+            "#slider4_direction",
+            "#slider5_direction",
+        ];
+
+        var prediction_value = 3;
+
+        var correct_prediction = [];
+        var random_prediction = [];
+
+        var slider_aims = [];
+
+        function updateHighscore() {
+            $("#highscore_message")[0].innerText = "Best Score: " + highscore;
+        }
+
+        var epoch = -1;
+        var highscore = 9999;
+        var cookie_highscore = getCookie("highscore");
+        if (cookie_highscore != null) {
+            highscore = Number(cookie_highscore);
+            updateHighscore();
+        }
+
+        function reset() {
+            prediction_value = Math.floor(Math.random() * 10);
+
+            correct_prediction = [];
+            random_prediction = [];
+            slider_aims = [];
+
+            epoch = -1;
+
+            for (var i = 0; i < 10; i++) {
+                if (i === prediction_value) {
+                    correct_prediction.push(1);
+                    random_prediction.push(0);
+                } else {
+                    correct_prediction.push(0);
+                    random_prediction.push(Math.random());
+                }
+            }
+
+            for (var i = 0; i < SLIDERS.length; i++) {
+                var aim = Math.random();
+                //var aim = 0.0;
+                slider_aims.push(aim);
+
+                var start_pos = Math.random();
+                while (Math.abs(aim - start_pos) < START_TOLERANCE)
+                    start_pos = Math.random();
+
+                $(SLIDERS[i])[0].value = start_pos;
+            }
+
+            $("#congrat_message")[0].innerText = "";
+
+            var img = $("#img_for_class")[0];
+            img.src = "{{ url_for('static', filename='imgs/mnist_images/') }}" + prediction_value + ".png";
+
+            test();
+        }
+
+        function test() {
+            var all_correct = true;
+            var avg_error = 0.0;
+
+            for (var i = 0; i < SLIDERS.length; i++ ) {
+                var curr_val = $(SLIDERS[i])[0].value;
+                var aim = slider_aims[i];
+
+                var curr_error = Math.abs(aim - curr_val)
+
+                avg_error += curr_error;
+
+                if (curr_error < CHECK_TOLERANCE)
+                    $(SLIDER_DIRECTIONS[i])[0].innerText = "✅";
+                else if (curr_val < aim) {
+                    $(SLIDER_DIRECTIONS[i])[0].innerText = "➡️";
+                    all_correct = false;
+                }
+                else {
+                    $(SLIDER_DIRECTIONS[i])[0].innerText = "⬅️";
+                    all_correct = false;
+                }
+            }
+            avg_error = avg_error / SLIDERS.length;
+
+            var mixed_predictions = [];
+            for (var i = 0; i < correct_prediction.length; i++ )
+                mixed_predictions.push(
+                    random_prediction[i] * avg_error + correct_prediction[i] * (1 - avg_error)
+                );
+
+            updateValues(mixed_predictions);
+
+            epoch += 1;
+            $("#epoch_message")[0].innerText = "Epoch: " + epoch;
+
+            if (all_correct) {
+                $("#congrat_message")[0].innerText = "Congratulations! You found the solution in " + epoch + " epochs!";
+
+                if (epoch < highscore) {
+                    highscore = epoch;
+                    updateHighscore();
+                    setCookie("highscore", highscore, 10);
+                }
+
+                $("#reset_button")[0].style.display = "block";
+            }
+        }
+
+        reset();  // Reset when loading the page
+    </script>
+
+
+{% endblock %}

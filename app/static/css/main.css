@@ -1,3 +1,22 @@
+.page_link {
+    border-radius: 5px;
+    padding: 5px;
+    color: white;
+    text-decoration: none;
+}
+
+.page_link:link {
+    text-decoration: none;
+}
+
+.page_link:hover {
+    background-color: #73aeec;
+}
+
+.active {
+    background-color: #007bff;
+}
+
 div {
     margin: 0;
 }
@@ -44,6 +63,20 @@ div.main_page {
     width: 100%;
     height: 100%;
 }
+
+.image_to_classify {
+    float: left;
+    margin: 20px;
+}
+
+.sliders {
+    float: left;
+}
+
+.messages {
+    padding: 0 20px;
+}
+
 
 :root {
     --blue: #007bff;
