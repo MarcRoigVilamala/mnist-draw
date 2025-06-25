@@ -12,6 +12,8 @@ Specifically, we will:
 
 We’ll be making the assumption that Pytorch is already configured and installed on your machine. If not, please ensure you install Pytorch using the official install instructions. We’ll need to install Flask, it is a Python web framework, so we can build our API endpoint. We’ll also need requests so we can consume our API as well.
 
+This was implemented using Python 3.6.
+
 Also we will use the requirements file. We use it to simple load dependencies. We must to use the below command to load dependencies (it probably fail, so remove the torch dowload line from next file).
 ```sh
  $ pip install -r requirements.txt
