@@ -35,6 +35,8 @@ We have successfully called our Pytorch model and we can draw over a canvas and 
 
 ### Run the Container
 
+**NOTE:** Container is now outdated compared to the main code.
+
 ```shell
 docker stop mnist-draw-app
 docker rm mnist-draw-app
