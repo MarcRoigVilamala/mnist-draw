@@ -73,6 +73,18 @@ div.main_page {
     float: left;
 }
 
+.slider {
+    width: 15em;
+}
+
+.slider_direction {
+    font-size: 30px;
+}
+
+.instructions {
+    width: 17em;
+}
+
 .messages {
     padding: 0 20px;
 }
